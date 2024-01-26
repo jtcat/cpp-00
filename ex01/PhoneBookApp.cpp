@@ -6,7 +6,7 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/01/26 09:19:57 by jcat             ###   ########.fr       */
+/*   Updated: 2024/01/26 09:44:18 by jcat             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,14 @@ void	add_prompt(PhoneBook &pb)
 	pb.addContact(newContact);
 }
 
+void	printContact(Contact &contact) {
+	std::cout << "First name: " << contact.getFirstName()
+		<< "\nLast name: " << contact.getLastName()
+		<< "\nNickname: " << contact.getNickName()
+		<< "\nPhone number: " << contact.getPhoneNumb()
+		<< "\nSecret: " << contact.getSecret() << std::endl;;
+}
+
 void	search_prompt(PhoneBook &pb)
 {
 	int		i;
@@ -80,6 +88,7 @@ void	search_prompt(PhoneBook &pb)
 		std::cout << std::endl << "Invalid index, try again: ";
 	}
 	contact = pb.getContact(i);
+	printContact(contact);
 }
 
 void	main_prompt(PhoneBook &pb)
