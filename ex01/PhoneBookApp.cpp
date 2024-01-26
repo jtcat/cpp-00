@@ -6,12 +6,13 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/01/26 09:44:18 by jcat             ###   ########.fr       */
+/*   Updated: 2024/01/26 13:33:50 by jcat             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
+#include <cstdio>
 #include <exception>
 #include <iomanip>
 #include <iostream>
@@ -59,6 +60,13 @@ void	printContact(Contact &contact) {
 		<< "\nSecret: " << contact.getSecret() << std::endl;;
 }
 
+void	printTrunc(std::string str, size_t len) {
+	if (str.length() > len)
+		std::cout << std::right << std::setw(len) << str.substr(0, len - 1) + '.';
+	else
+		std::cout << std::right << std::setw(len) << str;
+}
+
 void	search_prompt(PhoneBook &pb)
 {
 	int		i;
@@ -69,14 +77,16 @@ void	search_prompt(PhoneBook &pb)
 		std::cout << "No contacts present" << std::endl;
 		return ;
 	}
-	std::cout << "INDEX | FIRST NAME | LAST NAME | NICKNAME" << std::endl;
+	std::cout << "     INDEX|FIRST NAME| LAST NAME|  NICKNAME" << std::endl;
 	for (i = 0; i < pb.getContactNum(); ++i)
 	{
 		contact = pb.getContact(i);
-		std::cout << std::setw(10) << i << '|';
-		std::cout << std::setw(10) << contact.getFirstName() << '|';
-		std::cout << std::setw(10) << contact.getLastName() << '|';
-		std::cout << std::setw(10) << contact.getNickName();
+		std::cout << std::right << std::setw(10) << i << '|';
+		printTrunc(contact.getFirstName(), 10);
+		std::cout << '|';
+		printTrunc(contact.getLastName(), 10);
+		std::cout << '|';
+		printTrunc(contact.getNickName(), 10);
 		std::cout << std::endl;
 	}
 	std::cout << std::endl << "Select contact index: ";
