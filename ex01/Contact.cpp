@@ -6,23 +6,72 @@
 /*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 14:52:21 by joaoteix          #+#    #+#             */
-/*   Updated: 2023/11/11 14:52:54 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/01/26 09:18:50 by jcat             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
+#include <cctype>
+#include <cstddef>
+#include <string>
 
-class Contact {
-	public:
-		std::string	getFirstName(){
-			return firstName;
-		}
+const std::string	&Contact::getFirstName(void){
+	return _firstName;
+}
 
-		std::string	getLastName(){
-			return lastName;
-		}
+const std::string	&Contact::getLastName(void){
+	return _lastName;
+}
 
-		std::string	getPhoneNumb(){
-			return phoneNumb;
-		}
+const std::string	&Contact::getNickName(void){
+	return _nickName;
+}
+
+const std::string	&Contact::getPhoneNumb(void){
+	return _phoneNumb;
+}
+
+const std::string	&Contact::getSecret(void){
+	return _secret;
+}
+
+static bool	valField(const std::string &str, int (*charValidator)(int)) {
+	std::size_t	i;
+
+	for (i = 0; i < str.length() && charValidator(str[i]); i++)
+		;
+	return i == str.length();
+}
+
+bool	Contact::setFirstName(const std::string &firstName) {
+	if (!valField(firstName, isalpha))
+		return false;
+	_firstName = firstName;
+	return true;
+}
+
+bool	Contact::setLastName(const std::string &lastName) {
+	if (!valField(lastName, isalpha))
+		return false;
+	_lastName = lastName;
+	return true;
+}
+
+bool	Contact::setNickName(const std::string &nickName) {
+	if (!valField(nickName, isalpha))
+		return false;
+	_nickName = nickName;
+	return true;
+}
+
+bool	Contact::setPhoneNumb(const std::string &phoneNumb) {
+	if (!valField(phoneNumb, isdigit))
+		return false;
+	_phoneNumb = phoneNumb;
+	return true;
+}
+
+bool	Contact::setSecret(const std::string &secret) {
+	_secret = secret;
+	return true;
 }

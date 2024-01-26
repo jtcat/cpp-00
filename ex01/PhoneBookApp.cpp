@@ -3,46 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   PhoneBookApp.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/22 13:50:09 by joaoteix          #+#    #+#             */
-/*   Updated: 2023/11/27 16:46:53 by joaoteix         ###   ########.fr       */
+/*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
+/*   Updated: 2024/01/26 09:19:57 by jcat             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <cstring>
+#include "Contact.hpp"
+#include "PhoneBook.hpp"
+#include <exception>
 #include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <ostream>
+#include <string>
 
-std::view
-
-void	add_prompt(void)
-{
-}
-
-void	search_prompt(void)
-{
-	std::cout << std::setiosflags(std::ios::right) << std::setw(10);
-	std::cout << "     INDEX    |FIRST NAME| LAST NAME| nickname " << std::endl;
-	std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
-}
-
-void	main_prompt(void)
+const std::string	readValidInput(void)
 {
 	std::string	input;
 
-	do {
-		std::cout << "Insert a command: ";
-		std::cin >> input;
-		if (input == "ADD")
-			add_prompt();
-		else if (input == "SEARCH")
-			search_prompt();
-	}
-	while (std::cin && input != "EXIT");
+	if (!std::cin)
+		std::terminate();
+	std::cin >> input;
+	return input;
 }
 
-int	main(int argc, char **argv) {
-	std::cout << "*** Phonebook Manager ***" << std::endl;
-	main_prompt();
+void	add_prompt(PhoneBook &pb)
+{
+	Contact		newContact;
+
+	std::cout << "*** Adding new contact ***\n" << std::endl;
+	std::cout << "Insert first name: ";
+	while (!newContact.setFirstName(readValidInput()))
+		std::cout << std::endl << "Invalid name, try again: ";
+	std::cout << std::endl << "Insert last name: ";
+	while (!newContact.setLastName(readValidInput()))
+		std::cout << std::endl <<  "Invalid name, try again: ";
+	std::cout << std::endl << "Insert nickname: ";
+	while (!newContact.setNickName(readValidInput()))
+		std::cout << std::endl <<  "Invalid name, try again: ";
+	std::cout << std::endl << "Insert phone number: ";
+	while (!newContact.setPhoneNumb(readValidInput()))
+		std::cout << std::endl <<  "Invalid phone number, try again: ";
+	std::cout << std::endl << "Insert secret: ";
+	newContact.setSecret(readValidInput());
+	pb.addContact(newContact);
+}
+
+void	search_prompt(PhoneBook &pb)
+{
+	int		i;
+	Contact	&contact = pb.getContact(0);
+
+	if (pb.getContactNum() == 0)
+	{
+		std::cout << "No contacts present" << std::endl;
+		return ;
+	}
+	std::cout << "INDEX | FIRST NAME | LAST NAME | NICKNAME" << std::endl;
+	for (i = 0; i < pb.getContactNum(); ++i)
+	{
+		contact = pb.getContact(i);
+		std::cout << std::setw(10) << i << '|';
+		std::cout << std::setw(10) << contact.getFirstName() << '|';
+		std::cout << std::setw(10) << contact.getLastName() << '|';
+		std::cout << std::setw(10) << contact.getNickName();
+		std::cout << std::endl;
+	}
+	std::cout << std::endl << "Select contact index: ";
+	while (std::cin)
+	{
+		std::cin >> i;
+		if (i >= 0 && i < pb.getContactNum())
+			break;
+		std::cout << std::endl << "Invalid index, try again: ";
+	}
+	contact = pb.getContact(i);
+}
+
+void	main_prompt(PhoneBook &pb)
+{
+	std::string	input;
+
+	while (std::cin)
+	{
+		std::cout << "Insert a command: ";
+		std::cin >> input;
+		if (input == "EXIT")
+			return ; 
+		else if (input == "ADD")
+			add_prompt(pb);
+		else if (input == "SEARCH")
+			search_prompt(pb);
+	}
+}
+
+int	main(void)
+{
+	PhoneBook	pb;
+
+	std::cout << "*** 42 Phonebook Manager ***\n" << std::endl;
+	main_prompt(pb);
+	return 0;
 }

@@ -6,31 +6,31 @@
 /*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 14:54:59 by joaoteix          #+#    #+#             */
-/*   Updated: 2023/11/22 13:48:47 by joaoteix         ###   ########.fr       */
+/*   Updated: 2023/12/12 11:26:54 by jcat             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
+#include "Contact.hpp"
 
-class PhoneBook {
-	public:
-		~PhoneBook() {
-			while (--_contact_n)
-				delete _contacts[_contact_n];
-		}
+PhoneBook::PhoneBook(void) : _contacts_n(0) {}
 
-		void	addContact(Contact contact) {
-			if (_contact_n == 8) {	
-				delete _contacts[_contact_n - 1];
-				_contacts[_contact_n] = contact;
-			}
-			else {
-				_contacts[_contact_n] = contact;
-				_contact_n++;
-			}
-		}
+void	PhoneBook::addContact(const Contact &contact) {
+	if (_contacts_n < MAX_CONTACTS)
+		_contacts_n++;
+	_contacts[_contacts_n - 1] = contact;
+}
 
-		const Contact	*getContacts(void) {
-			return _contacts;
-		}
+Contact	&PhoneBook::getContact(int index)
+{
+	return _contacts[index];
+}
+
+int		PhoneBook::getContactNum(void)
+{
+	return _contacts_n;
+}
+
+const Contact	*PhoneBook::getContacts(void) {
+	return _contacts;
 }
