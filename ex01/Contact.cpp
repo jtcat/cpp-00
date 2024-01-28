@@ -6,7 +6,7 @@
 /*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 14:52:21 by joaoteix          #+#    #+#             */
-/*   Updated: 2024/01/26 09:18:50 by jcat             ###   ########.fr       */
+/*   Updated: 2024/01/28 11:43:42 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ const std::string	&Contact::getSecret(void){
 static bool	valField(const std::string &str, int (*charValidator)(int)) {
 	std::size_t	i;
 
+	if (str.empty())
+		return false;
 	for (i = 0; i < str.length() && charValidator(str[i]); i++)
 		;
 	return i == str.length();

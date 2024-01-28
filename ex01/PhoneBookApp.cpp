@@ -6,13 +6,14 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/01/26 13:33:50 by jcat             ###   ########.fr       */
+/*   Updated: 2024/01/28 11:58:19 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
 #include <cstdio>
+#include <cstdlib>
 #include <exception>
 #include <iomanip>
 #include <iostream>
@@ -24,9 +25,9 @@ const std::string	readValidInput(void)
 {
 	std::string	input;
 
-	if (!std::cin)
-		std::terminate();
 	std::cin >> input;
+	if (!std::cin)
+		return std::string();
 	return input;
 }
 
@@ -36,18 +37,32 @@ void	add_prompt(PhoneBook &pb)
 
 	std::cout << "*** Adding new contact ***\n" << std::endl;
 	std::cout << "Insert first name: ";
-	while (!newContact.setFirstName(readValidInput()))
+	while (!newContact.setFirstName(readValidInput())) {
+		if (!std::cin)
+			return ;
 		std::cout << std::endl << "Invalid name, try again: ";
+	}
 	std::cout << std::endl << "Insert last name: ";
-	while (!newContact.setLastName(readValidInput()))
+	while (!newContact.setLastName(readValidInput())) {
+		if (!std::cin)
+			return ;
 		std::cout << std::endl <<  "Invalid name, try again: ";
+	}
 	std::cout << std::endl << "Insert nickname: ";
-	while (!newContact.setNickName(readValidInput()))
+	while (!newContact.setNickName(readValidInput())) {
+		if (!std::cin)
+			return ;
 		std::cout << std::endl <<  "Invalid name, try again: ";
+	}
 	std::cout << std::endl << "Insert phone number: ";
-	while (!newContact.setPhoneNumb(readValidInput()))
+	while (!newContact.setPhoneNumb(readValidInput())) {
+		if (!std::cin)
+			return ;
 		std::cout << std::endl <<  "Invalid phone number, try again: ";
+	}
 	std::cout << std::endl << "Insert secret: ";
+	if (!std::cin)
+		return ;
 	newContact.setSecret(readValidInput());
 	pb.addContact(newContact);
 }
