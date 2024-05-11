@@ -6,7 +6,7 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/05/11 18:14:09 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/05/11 20:11:50 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@
 #include <ostream>
 #include <string>
 #include <locale>
+#include <limits>
 
 const std::wstring	readValidInput(void)
 {
 	std::wstring	input;
 
 	std::wcin >> input;
+	std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	if (!std::wcin)
 		return std::wstring();
 	return input;
