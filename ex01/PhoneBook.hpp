@@ -6,7 +6,7 @@
 /*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 14:34:56 by joaoteix          #+#    #+#             */
-/*   Updated: 2023/12/12 11:26:05 by jcat             ###   ########.fr       */
+/*   Updated: 2024/05/11 13:59:54 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ class PhoneBook {
 	public:
 		PhoneBook();
 
-		void	addContact(const Contact &contact);
+		void			addContact(const Contact &contact);
 
-		Contact	&getContact(const int index);
+		const Contact*	getContact(const int index);
 
-		const Contact	*getContacts(void);
+		const Contact*	getContacts(void);
 
-		int		getContactNum(void);
+		int				getContactNum(void);
 };
 
 #endif

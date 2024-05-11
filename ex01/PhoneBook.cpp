@@ -6,7 +6,7 @@
 /*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 14:54:59 by joaoteix          #+#    #+#             */
-/*   Updated: 2023/12/12 11:26:54 by jcat             ###   ########.fr       */
+/*   Updated: 2024/05/11 14:03:37 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	PhoneBook::addContact(const Contact &contact) {
 	_contacts[_contacts_n - 1] = contact;
 }
 
-Contact	&PhoneBook::getContact(int index)
+const Contact*	PhoneBook::getContact(int index)
 {
-	return _contacts[index];
+	return _contacts + index;
 }
 
 int		PhoneBook::getContactNum(void)
