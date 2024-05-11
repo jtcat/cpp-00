@@ -1,12 +1,32 @@
-CC:= c++
+CXX:= c++
 
-CFLAGS:= -Wall -Wextra -Werror -std=c++98
+CXXFLAGS:= -Wall -Wextra -Werror -std=c++98
+
+NAME:= tests
+
+SRC:= Account.cpp tests.cpp
+
+OBJ:= $(SRC:.cpp=.o)
 
 TEST_LOG:= 19920104_091532.log
 
-tests:	Account.hpp Account.cpp tests.cpp
-	$(CC) $(CFLAGS) Account.cpp tests.cpp -o $@
+all: $(NAME)
 
-diff:	tests
-	./tests | diff - $(TEST_LOG)
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+$(NAME):	Account.hpp $(OBJ)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $@
+
+diff:	$(NAME)
+	./$(NAME) | diff - $(TEST_LOG)
+
+clean:
+	$(RM) -f $(OBJ)
+
+fclean: clean
+	$(RM) -f $(NAME)
+
+re: clean $(NAME)
+
+PHONY: all clean fclean re diff
