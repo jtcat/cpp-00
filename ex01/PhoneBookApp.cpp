@@ -6,7 +6,7 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/05/11 20:11:50 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/05/12 17:28:40 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,20 @@
 #include <locale>
 #include <limits>
 
-const std::wstring	readValidInput(void)
+enum e_inputType
+{
+	INPUT_TYPE_STRING,
+	INPUT_TYPE_LINE
+};
+
+const std::wstring	readValidInput(enum e_inputType inputType)
 {
 	std::wstring	input;
 
-	std::wcin >> input;
+	if (inputType == INPUT_TYPE_STRING)
+		std::wcin >> input;
+	else if (inputType == INPUT_TYPE_LINE)
+		std::getline(std::wcin, input);
 	std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	if (!std::wcin)
 		return std::wstring();
@@ -38,31 +47,31 @@ void	add_prompt(PhoneBook &pb)
 
 	std::wcout << "*** Adding new contact ***\n" << std::endl;
 	std::wcout << "Insert first name: ";
-	while (!newContact.setFirstName(readValidInput())) {
+	while (!newContact.setFirstName(readValidInput(INPUT_TYPE_STRING))) {
 		if (std::wcin.eof())
 			return ;
 		std::wcout << std::endl << "Invalid name, try again: ";
 	}
 	std::wcout << std::endl << "Insert last name: ";
-	while (!newContact.setLastName(readValidInput())) {
+	while (!newContact.setLastName(readValidInput(INPUT_TYPE_STRING))) {
 		if (std::wcin.eof())
 			return ;
 		std::wcout << std::endl <<  "Invalid name, try again: ";
 	}
 	std::wcout << std::endl << "Insert nickname: ";
-	while (!newContact.setNickName(readValidInput())) {
+	while (!newContact.setNickName(readValidInput(INPUT_TYPE_STRING))) {
 		if (std::wcin.eof())
 			return ;
 		std::wcout << std::endl <<  "Invalid name, try again: ";
 	}
 	std::wcout << std::endl << "Insert phone number: ";
-	while (!newContact.setPhoneNumb(readValidInput())) {
+	while (!newContact.setPhoneNumb(readValidInput(INPUT_TYPE_STRING))) {
 		if (std::wcin.eof())
 			return ;
 		std::wcout << std::endl <<  "Invalid phone number, try again: ";
 	}
 	std::wcout << std::endl << "Insert secret: ";
-	newContact.setSecret(readValidInput());
+	newContact.setSecret(readValidInput(INPUT_TYPE_LINE));
 	if (std::wcin.eof())
 		return ;
 	pb.addContact(newContact);
