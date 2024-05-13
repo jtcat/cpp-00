@@ -6,7 +6,7 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/05/12 17:28:40 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:09:37 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ const std::wstring	readValidInput(enum e_inputType inputType)
 {
 	std::wstring	input;
 
-	if (inputType == INPUT_TYPE_STRING)
+	if (inputType == INPUT_TYPE_STRING) {
+
 		std::wcin >> input;
+		std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
 	else if (inputType == INPUT_TYPE_LINE)
 		std::getline(std::wcin, input);
-	std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	if (!std::wcin)
 		return std::wstring();
 	return input;
