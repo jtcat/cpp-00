@@ -6,7 +6,7 @@
 /*   By: joaoteix <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 14:52:21 by joaoteix          #+#    #+#             */
-/*   Updated: 2024/05/11 18:49:31 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:33:50 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,32 @@
 #include <string>
 #include <cwctype>
 
-std::wstring	Contact::getFirstName(void) const
+std::string	Contact::getFirstName(void) const
 {
 	return _firstName;
 }
 
-std::wstring	Contact::getLastName(void) const
+std::string	Contact::getLastName(void) const
 {
 	return _lastName;
 }
 
-std::wstring	Contact::getNickName(void) const
+std::string	Contact::getNickName(void) const
 {
 	return _nickName;
 }
 
-std::wstring	Contact::getPhoneNumb(void) const
+std::string	Contact::getPhoneNumb(void) const
 {
 	return _phoneNumb;
 }
 
-std::wstring	Contact::getSecret(void) const
+std::string	Contact::getSecret(void) const
 {
 	return _secret;
 }
 
-static bool	valField(const std::wstring &str, int (*charValidator)(std::wint_t))
+static bool	valField(const std::string &str, int (*charValidator)(int))
 {
 	std::size_t	i;
 
@@ -50,44 +50,44 @@ static bool	valField(const std::wstring &str, int (*charValidator)(std::wint_t))
 	if (!charValidator)
 		return true;
 	for (i = 0; i < str.length(); i++)
-		if (!charValidator(static_cast<wchar_t>(str[i])))
+		if (!charValidator(static_cast<int>(str[i])))
 			return false;
 	return true;
 }
 
-bool	Contact::setFirstName(const std::wstring &firstName)
+bool	Contact::setFirstName(const std::string &firstName)
 {
-	if (!valField(firstName, std::iswalpha))
+	if (!valField(firstName, std::isalpha))
 		return false;
 	_firstName = firstName;
 	return true;
 }
 
-bool	Contact::setLastName(const std::wstring &lastName)
+bool	Contact::setLastName(const std::string &lastName)
 {
-	if (!valField(lastName, std::iswalpha))
+	if (!valField(lastName, std::isalpha))
 		return false;
 	_lastName = lastName;
 	return true;
 }
 
-bool	Contact::setNickName(const std::wstring &nickName)
+bool	Contact::setNickName(const std::string &nickName)
 {
-	if (!valField(nickName, std::iswalpha))
+	if (!valField(nickName, std::isalpha))
 		return false;
 	_nickName = nickName;
 	return true;
 }
 
-bool	Contact::setPhoneNumb(const std::wstring &phoneNumb)
+bool	Contact::setPhoneNumb(const std::string &phoneNumb)
 {
-	if (!valField(phoneNumb, iswdigit))
+	if (!valField(phoneNumb, isdigit))
 		return false;
 	_phoneNumb = phoneNumb;
 	return true;
 }
 
-bool	Contact::setSecret(const std::wstring &secret)
+bool	Contact::setSecret(const std::string &secret)
 {
 	if (!valField(secret, NULL))
 		return false;

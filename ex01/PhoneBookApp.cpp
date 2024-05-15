@@ -6,7 +6,7 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/05/13 15:09:37 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/05/15 09:26:55 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <locale>
+#include <sstream>
 #include <limits>
+#include <csignal>
 
 enum e_inputType
 {
@@ -27,131 +28,150 @@ enum e_inputType
 	INPUT_TYPE_LINE
 };
 
-const std::wstring	readValidInput(enum e_inputType inputType)
+const std::string	readValidInput(enum e_inputType inputType)
 {
-	std::wstring	input;
+	std::string			line;
+	std::string			tok;
+	std::string			next_tok;
 
-	if (inputType == INPUT_TYPE_STRING) {
+	std::getline(std::cin, line);
 
-		std::wcin >> input;
-		std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	if (!std::cin)
+		return std::string();
+
+	if (inputType == INPUT_TYPE_LINE) {
+		return line;
 	}
-	else if (inputType == INPUT_TYPE_LINE)
-		std::getline(std::wcin, input);
-	if (!std::wcin)
-		return std::wstring();
-	return input;
+
+	std::stringstream	s(line);
+
+	s >> tok;
+	if (s >> next_tok)
+		return std::string();
+
+	return tok;
 }
 
-void	add_prompt(PhoneBook &pb)
+void	addContactPrompt(PhoneBook &pb)
 {
 	Contact		newContact;
 
-	std::wcout << "*** Adding new contact ***\n" << std::endl;
-	std::wcout << "Insert first name: ";
+	std::cout << "*** Adding new contact ***\n" << std::endl;
+	std::cout << "Insert first name: ";
 	while (!newContact.setFirstName(readValidInput(INPUT_TYPE_STRING))) {
-		if (std::wcin.eof())
+		if (std::cin.eof())
 			return ;
-		std::wcout << std::endl << "Invalid name, try again: ";
+		std::cout << std::endl << "Invalid name, try again: ";
 	}
-	std::wcout << std::endl << "Insert last name: ";
+	std::cout << std::endl << "Insert last name: ";
 	while (!newContact.setLastName(readValidInput(INPUT_TYPE_STRING))) {
-		if (std::wcin.eof())
+		if (std::cin.eof())
 			return ;
-		std::wcout << std::endl <<  "Invalid name, try again: ";
+		std::cout << std::endl <<  "Invalid name, try again: ";
 	}
-	std::wcout << std::endl << "Insert nickname: ";
+	std::cout << std::endl << "Insert nickname: ";
 	while (!newContact.setNickName(readValidInput(INPUT_TYPE_STRING))) {
-		if (std::wcin.eof())
+		if (std::cin.eof())
 			return ;
-		std::wcout << std::endl <<  "Invalid name, try again: ";
+		std::cout << std::endl <<  "Invalid name, try again: ";
 	}
-	std::wcout << std::endl << "Insert phone number: ";
+	std::cout << std::endl << "Insert phone number: ";
 	while (!newContact.setPhoneNumb(readValidInput(INPUT_TYPE_STRING))) {
-		if (std::wcin.eof())
+		if (std::cin.eof())
 			return ;
-		std::wcout << std::endl <<  "Invalid phone number, try again: ";
+		std::cout << std::endl <<  "Invalid phone number, try again: ";
 	}
-	std::wcout << std::endl << "Insert secret: ";
+	std::cout << std::endl << "Insert secret: ";
 	newContact.setSecret(readValidInput(INPUT_TYPE_LINE));
-	if (std::wcin.eof())
+	if (std::cin.eof())
 		return ;
 	pb.addContact(newContact);
 }
 
 static void	printContact(const Contact &contact)
 {
-	std::wcout << "First name: " << contact.getFirstName()
+	std::cout << "First name: " << contact.getFirstName()
 		<< "\nLast name: " << contact.getLastName()
 		<< "\nNickname: " << contact.getNickName()
 		<< "\nPhone number: " << contact.getPhoneNumb()
 		<< "\nSecret: " << contact.getSecret() << std::endl;;
 }
 
-void	printTrunc(std::wstring str, size_t len) {
+void	printTrunc(std::string str, size_t len) {
 	if (str.length() > len)
-		std::wcout << std::right << std::setw(len) << str.substr(0, len - 1) + L'.';
+		std::cout << std::right << std::setw(len) << str.substr(0, len - 1) + '.';
 	else
-		std::wcout << std::right << std::setw(len) << str;
+		std::cout << std::right << std::setw(len) << str;
 }
 
-void	search_prompt(PhoneBook &pb)
+void	searchContactPrompt(PhoneBook &pb)
 {
 	int				i;
 	const Contact*	contact;
 
 	if (pb.getContactNum() == 0)
 	{
-		std::wcout << L"No contacts present" << std::endl;
+		std::cout << "No contacts present" << std::endl;
 		return ;
 	}
-	std::wcout << "     INDEX|FIRST NAME| LAST NAME|  NICKNAME" << std::endl;
+	std::cout << "     INDEX|FIRST NAME| LAST NAME|  NICKNAME" << std::endl;
 	for (i = 0; i < pb.getContactNum(); ++i)
 	{
 		contact = pb.getContact(i);
-		std::wcout << std::right << std::setw(10) << i << '|';
+		std::cout << std::right << std::setw(10) << i << '|';
 		printTrunc(contact->getFirstName(), 10);
-		std::wcout << '|';
+		std::cout << '|';
 		printTrunc(contact->getLastName(), 10);
-		std::wcout << '|';
+		std::cout << '|';
 		printTrunc(contact->getNickName(), 10);
-		std::wcout << std::endl;
+		std::cout << std::endl;
 	}
-	std::wcout << std::endl << "Select contact index: ";
-	while (std::wcin)
+	std::cout << std::endl << "Select contact index: ";
+	while (std::cin)
 	{
-		std::wcin >> i;
-		if (!std::wcin)
+		std::cin >> i;
+		if (!std::cin)
 		{
-			std::wcin.clear();
-			std::wcin.ignore(10000, '\n');
-			std::wcout << std::endl << L"Invalid index, try again: ";
+			std::cin.clear();
+			std::cin.ignore(10000, '\n');
+			std::cout << std::endl << "Invalid index, try again: ";
 			continue;
 		}
 		if (i >= 0 && i < pb.getContactNum())
 			break;
-		std::wcout << std::endl << L"Invalid index, try again: ";
+		std::cout << std::endl << "Invalid index, try again: ";
 	}
 	contact = pb.getContact(i);
 	printContact(*contact);
 }
 
-void	main_prompt(PhoneBook &pb)
+void	mainPrompt(PhoneBook &pb)
 {
-	std::wstring	input;
+	std::string	input;
 
-	while (std::wcin)
+	while (std::cin)
 	{
-		std::wcout << L"Insert a command: ";
-		std::wcin >> input;
-		if (!std::wcin || input == L"EXIT")
+		std::cout << "Insert a command: ";
+		input = readValidInput(INPUT_TYPE_STRING);
+		if (!std::cin || input == "EXIT")
 			return ; 
-		else if (input == L"ADD")
-			add_prompt(pb);
-		else if (input == L"SEARCH")
-			search_prompt(pb);
+		else if (input == "ADD")
+			addContactPrompt(pb);
+		else if (input == "SEARCH")
+			searchContactPrompt(pb);
 		else
-		 	std::wcout << L"Unrecognized command. Try again" << std::endl;
+		 	std::cout << "Unrecognized command. Try again" << std::endl;
+		//std::cin.clear();
+		//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+}
+
+void	sig_handler(int signal)
+{
+	if (signal == SIGINT)
+	{
+		std::cout << "SIGINT" << std::endl;
+		exit(1);
 	}
 }
 
@@ -160,13 +180,16 @@ int	main(void)
 	PhoneBook	pb;
 
 	//std::locale::global(std::locale(""));
+//	std::locale	l("C.UTF-8");
+//
+//	std::setlocale(LC_ALL, "C.UTF-8");
+//	std::cout.imbue(l);
 
-	std::setlocale(LC_ALL, "C.UTF-8");
-	std::wcout.imbue(std::locale("C.UTF-8"));
+//	std::cout.imbue(std::locale(""));
+//	std::cin.imbue(std::locale(""));
+	std::signal(SIGINT, sig_handler);
 
-//	std::wcout.imbue(std::locale(""));
-//	std::wcin.imbue(std::locale(""));
-	std::wcout << L"*** 42 Phonebook Manager ***\n" << std::endl;
-	main_prompt(pb);
+	std::cout << "*** 42 Phonebook Manager ***\n" << std::endl;
+	mainPrompt(pb);
 	return 0;
 }
