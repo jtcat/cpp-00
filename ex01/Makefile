@@ -11,7 +11,7 @@ OBJ:= $(SRC:.cpp=.o)
 
 all: $(NAME)
 
-%.o:	%.c
+%.o:	%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(NAME):	$(OBJ) $(HDR)
