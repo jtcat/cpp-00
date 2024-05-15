@@ -6,7 +6,7 @@
 /*   By: jcat <joaoteix@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 11:39:58 by jcat              #+#    #+#             */
-/*   Updated: 2024/05/15 09:26:55 by joaoteix         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:10:58 by joaoteix         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <ostream>
 #include <string>
 #include <sstream>
-#include <limits>
 #include <csignal>
 
 enum e_inputType
@@ -137,8 +136,10 @@ void	searchContactPrompt(PhoneBook &pb)
 			std::cout << std::endl << "Invalid index, try again: ";
 			continue;
 		}
-		if (i >= 0 && i < pb.getContactNum())
+		if (i >= 0 && i < pb.getContactNum()) {
+			std::cin.ignore(10000, '\n');
 			break;
+		}
 		std::cout << std::endl << "Invalid index, try again: ";
 	}
 	contact = pb.getContact(i);
